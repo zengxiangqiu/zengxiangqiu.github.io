@@ -1,7 +1,7 @@
 ---
 title:  "依赖注入DI"
 date:   2021-03-15 11:12:27 +0800
-categories: [Design pattern]
+categories: [Design Pattern]
 tags: [di,dip,ioc]
 ---
 
