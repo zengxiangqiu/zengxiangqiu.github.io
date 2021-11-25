@@ -8,7 +8,8 @@ tags: [di,dip,ioc]
 为了实现松散耦合设计，了解DI、DIP、IOC以及IOC Container。
 ## IOC 反转控制原则
 **控制**包括对应用程序流的控制，以及对对象创建或从属对象创建和绑定的流的控制,使用Factory模式实现IOC。
-```CSharp
+
+```cs
 public class CustomerBusinessLogic
 {
     public CustomerBusinessLogic()
@@ -22,6 +23,7 @@ public class CustomerBusinessLogic
     }
 }
 ```
+
 我们将创建依赖类的对象的控制从一个CustomerBusinessLogic类转换到另一个DataAccessFactory类。
 
 ## DIP 依赖注入原则
@@ -29,7 +31,7 @@ public class CustomerBusinessLogic
 2. 抽象不应依赖细节。细节应取决于抽象。
 
 
-```CSharp
+```cs
 public interface ICustomerDataAccess
 {
     string GetCustomerName(int id);
@@ -80,7 +82,7 @@ public class CustomerBusinessLogic
 
 所述FromServicesAttribute使直接注入到服务的操作方法，而无需使用构造器注入：
 
-```CSharp
+```cs
 public IActionResult About([FromServices] IDateTime dateTime)
 {
     return Content( $"Current server time: {dateTime.Now}");

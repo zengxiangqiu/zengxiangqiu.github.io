@@ -1,0 +1,8 @@
+---
+title:  "A/B Tests"
+date:   2021-11-25 11:12:27 +0800
+categories: [DevOps]
+tags: [test]
+---
+
+[A/B Tests](https://mailchimp.com/marketing-glossary/ab-tests/)
