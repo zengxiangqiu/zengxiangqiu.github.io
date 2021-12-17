@@ -31,3 +31,36 @@ On the other hand, a process will stop when the terminal closes because it is an
 
 [学习常用的命令](https://vitux.com/40-most-used-ubuntu-commands/)
 [ The Directory Tree](https://help.ubuntu.com/lts/installation-guide/armhf/apcs02.html)
+
+## Tools
+### netstatus
+
+[link](https://www.howtogeek.com/513003/how-to-use-netstat-on-linux/)
+
+apt-get install net-Tools
+
+`netstat -tlnp`
+
+端口 53 systemd-resolved为域名系统 (DNS)（包括DNSSEC和DNS over TLS）、多播 DNS (mDNS)和链路本地多播名称解析 (LLMNR)提供解析器服务。
+端口 631 打印服务
+
+
+
+
+sudo  = superuser do
+
+su = switch user
+
+sudo adduser user_name
+
+groups
+
+id user_name
+
+sudo usermod -aG sudo user_name
+
+
+[API查询](https://wiki.archlinux.org/title/Man_page)
+
+
+
