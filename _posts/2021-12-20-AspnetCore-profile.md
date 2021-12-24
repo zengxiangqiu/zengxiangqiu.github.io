@@ -74,6 +74,19 @@ profiles 集合
 
 [Use multiple environments in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-6.0)
 
+## 问题
+
+1. middleware 和 actionfilter 均无法catch ModelValid Exception
+
+    因为内置的 ModelStateInvalidFilter中OnActionExecuting 中 设置 context.Result
+
+    [Automatic HTTP 400 responses](https://docs.microsoft.com/en-us/aspnet/core/web-api/?view=aspnetcore-6.0#automatic-http-400-responses) 提到
+
+    > The [ApiController] attribute makes model validation errors automatically trigger an HTTP 400 response.
+
+
+
+
 
 
 
@@ -83,4 +96,9 @@ profiles 集合
 ![endpoint](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/index/_static/mvc-endpoint.svg?view=aspnetcore-6.0)
 
 
-
+1. apiendpoint (Controller)
+2. automapper  mapprofile (Dto)
+3. fluentvalidation (验证)
+4. middlerware exceptionfilter actionfilter actionresult (pipline ,异常处理，返回类型)
+5. authentication (验证)
+6. authorization （授权）

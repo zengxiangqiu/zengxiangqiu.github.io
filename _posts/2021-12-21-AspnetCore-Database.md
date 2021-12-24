@@ -15,3 +15,39 @@ tags: [Database]
 [Modular Architecture in ASP.NET Core – Building Better Monoliths](https://codewithmukesh.com/blog/modular-architecture-in-aspnet-core/)
 
 模块化单体服务
+
+## 分离迁移项目
+
+> A: migration-> 项目migrations
+>
+> B: 项目 Services （Startup 注入）
+>
+> C: DbContext,Entity -> 项目 Entity
+
+B 引用 C， 从B 中生成 migration 文件 到 A，B 启动时 检索 A 中的文件
+
+
+
+dotnet ef migration 工具首先尝试通过调用 Program.CreateHostBuilder()、调用 Build()，然后访问 Services 属性来获取服务提供程序。[链接][3]
+
+## 问题
+
+1. add migration 失败，提示unable to create object type 或 no database provider
+
+按[Using a Separate Migrations Project][1]创建不同的项目存储Migration，提示以上失败，检查项目相对路径
+
+`dotnet ef migrations add init --project ../StaffApi.Database.Migrations`
+
+
+
+
+
+
+
+[1]:https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/projects?tabs=dotnet-core-cli
+[2]:https://docs.microsoft.com/zh-cn/ef/core/dbcontext-configuration/
+[3]:(https://docs.microsoft.com/zh-cn/ef/core/cli/dbcontext-creation?tabs=dotnet-core-cli)
+[HOW DOES ENTITY FRAMEWORK MIGRATION DEAL WITH DBCONTEXT?](https://hungdoan.com/2019/06/16/how-does-entity-framework-core-add-migrations/)
+
+
+

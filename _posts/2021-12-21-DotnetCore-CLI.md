@@ -39,4 +39,4 @@ dotnet tool install -g dotnet-aspnet-codegenerator
 dotnet tool update -g dotnet-aspnet-codegenerator
 dotnet aspnet-codegenerator controller -name TodoItemsController -async -api -m TodoItem -dc TodoContext -outDir Controllers
 
-dotnet ef dbcontext scaffold "Server=192.168.1.111;Database=lsj50;User Id=Program;Password=lstfgh0738;" Microsoft.EntityFrameworkCore.SqlServer -t tblEmployeeProperties -f --use-database-names --output-dir Models
+dotnet ef dbcontext scaffold "Server=192.168.1.111;Database=lsj50;User Id=Program;Password=lstfgh0738;" Microsoft.EntityFrameworkCore.SqlServer -t tblEmployeeProperties -f --use-database-names --output-dir Models --projetc projectname
