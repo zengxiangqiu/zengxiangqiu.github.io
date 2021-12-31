@@ -101,4 +101,7 @@ profiles 集合
 3. fluentvalidation (验证)
 4. middlerware exceptionfilter actionfilter actionresult (pipline ,异常处理，返回类型)
 5. authentication (验证)
-6. authorization （授权）
+6. authorization (授权)
+7. cache (缓存)
+8. discovery (发现)
+9. gateway (网关)
