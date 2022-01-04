@@ -39,15 +39,36 @@ dotnet ef migration 工具首先尝试通过调用 Program.CreateHostBuilder()�
 `dotnet ef migrations add init --project ../StaffApi.Database.Migrations`
 
 
+1. EF Core 配置外键
 
+  [Relationships](https://docs.microsoft.com/en-us/ef/core/modeling/relationships?tabs=fluent-api%2Cfluent-api-simple-key%2Csimple-key)
+
+ * Single navigation property
+
+  ```CSharp
+  public List<Post> Posts { get; set; }
+  ...
+  public int **PostId** { get; set; }
+  ```
+
+ * Manual configuration
+
+    ```CSharp
+    modelBuilder.Entity<Post>()
+      .HasOne(p => p.Blog)
+      .WithMany(b => b.Posts)
+      .HasForeignKey(p => p.BlogForeignKey)
+      .OnDelete(DeleteBehavior.Cascade);
+      ;
+    ```
 
 
 
 
 [1]:https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/projects?tabs=dotnet-core-cli
 [2]:https://docs.microsoft.com/zh-cn/ef/core/dbcontext-configuration/
-[3]:(https://docs.microsoft.com/zh-cn/ef/core/cli/dbcontext-creation?tabs=dotnet-core-cli)
-[HOW DOES ENTITY FRAMEWORK MIGRATION DEAL WITH DBCONTEXT?](https://hungdoan.com/2019/06/16/how-does-entity-framework-core-add-migrations/)
+[3]:https://docs.microsoft.com/zh-cn/ef/core/cli/dbcontext-creation?tabs=dotnet-core-cli
+[HOW DOES ENTITY FRAMEWORK MIGRATION DEAL WITH DBCONTEXT?]:https://hungdoan.com/2019/06/16/how-does-entity-framework-core-add-migrations/
 
 
 
