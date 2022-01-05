@@ -23,7 +23,7 @@ ids 4 配置 Client Scoped , 客户端（web）通过disconvery 中的 endpoint 
 
     ApiResource 包含 one or more ApiScope，参考[Defining Resources](https://identityserver4.readthedocs.io/en/latest/topics/resources.html)
 
-    ```CSharp
+    ```csharp
      new ApiResource("invoice", "Invoice API")
         {
             Scopes = { "invoice.read", "invoice.pay", "manage" }
@@ -37,7 +37,7 @@ ids 4 配置 Client Scoped , 客户端（web）通过disconvery 中的 endpoint 
     Install-Package IdentityServer4.AccessTokenValidation
     ```
 
-    ```CSharp
+    ```csharp
     services.AddAuthentication("Bearer")
     .AddIdentityServerAuthentication("Bearer", options =>
     {
@@ -46,7 +46,7 @@ ids 4 配置 Client Scoped , 客户端（web）通过disconvery 中的 endpoint 
     });
     ```
 
-    ```CSharp
+    ```csharp
     app.UseAuthorization();
     ```
     aspnetcore webapi 搭建微服务，利用第三方依赖包注册服务，并指定授权服务，ApiName 对应已注册的API Resources，最后在pipline中调用
@@ -60,7 +60,7 @@ ids 4 配置 Client Scoped , 客户端（web）通过disconvery 中的 endpoint 
 
       [Authorization based on Scopes and other Claims](https://docs.duendesoftware.com/identityserver/v5/apis/aspnetcore/authorization/)中建议
 
-      ```CSharp
+      ```csharp
       services.AddAuthorization(options =>
       {
           options.AddPolicy("StaffRead", policy => policy.RequireClaim(JwtClaimTypes.Scope, "staffApi.read"));
@@ -68,7 +68,7 @@ ids 4 配置 Client Scoped , 客户端（web）通过disconvery 中的 endpoint 
       });
       ```
 
-      ```CSharp
+      ```csharp
       [Authorize(Policy ="Staff")]
       ```
 
