@@ -53,8 +53,19 @@ tags: [test]
         Assert.True(isValid, $"The password {password} is not valid");
       }
   ```
+* Class Fixtures
+
+  When to use: when you want to create **a single test context** and share it among all the tests in the class, and have it cleaned up after all the tests in the class have finished.
+
+  ...If the test class needs access to the fixture instance, add it as a constructor argument, and it will be provided **automatically**.
+
+  单类中共享单例， 构造函数自动注入
 
 * Collection
+
+  When to use: when you want to create a single test context and share it among tests **in several test classes**, and have it cleaned up after all the tests in the test classes have finished.
+
+  多类中共享单例
 
   参考 [Shared Context between Tests](https://xunit.net/docs/shared-context#collection-fixture)
 
@@ -178,6 +189,10 @@ tags: [test]
 
   参考[Converting integration tests to .NET Core 3.0](https://andrewlock.net/converting-integration-tests-to-net-core-3/)
 
+  重点参考 [传入TestOutputHelper](https://stackoverflow.com/questions/59166798/net-core-3-0-issue-with-iclassfixture-unresolved-constructor-arguments-ites)
+
+  在`factory.createClient`前 传入 `factory.TestOutputHelper = ...`
+
   在测试类中实例化，传入ITestOutputHelper
   ```csharp
   public ListEndpoint(ITestOutputHelper testOutputHelper)
@@ -232,3 +247,36 @@ tags: [test]
   });
   ```
 
+4. 在测试库中 seed Data
+
+   ```csharp
+     if (env.IsDevelopment())
+     {
+         logger.LogInformation("Seeding Database...");
+         using (var scope = app.ApplicationServices.CreateScope())
+         {
+             var scopedProvider = scope.ServiceProvider;
+             try
+             {
+                 var lsj50Context = scopedProvider.GetRequiredService<lsj50Context>();
+                 await lsj50ContextSeed.SeedAsync(lsj50Context, logger);
+             }
+             catch (Exception ex)
+             {
+                 logger.LogError(ex, "An error occurred seeding the DB.");
+             }
+         }
+     }
+   ```
+
+## 常见问题
+1.  Response status code does not indicate success: 415 (Unsupported Media Type).
+  ```csharp
+  public override async Task<ActionResult<DeleteStaffResponse>> HandleAsync(
+    **[FromRoute]**DeleteStaffRequest request
+    , CancellationToken cancellationToken = default)
+
+  ```
+2. System.InvalidOperationException : Each parameter in constructor 'Void .ctor(System.Guid)' on type 'Lsd.PublicApi.StaffEndpoints.
+
+   序列化需要默认不带参数的构造函数

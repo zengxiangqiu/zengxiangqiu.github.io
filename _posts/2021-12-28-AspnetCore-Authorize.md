@@ -5,6 +5,65 @@ categories: [DevOps]
 tags: [auth]
 ---
 
+## 重点
+
+jwt 包括三部分，header、payload以及signature，前两部分可以被base64解析，而保证jwt不被篡改的关键在于 **signature**,因为采用了SHA256对称算法，当验证服务端（identity server）收到token时，将解析header和payload后利用密钥和算法生成对应的signature,与原token中的作比较，另外jwt中的nonce可以抵御重放攻击。
+
+参考[这里](https://stackoverflow.com/questions/31309759/what-is-secret-key-for-jwt-based-authentication-and-how-to-generate-it)
+
+## audience
+
+预期的受众
+
+ids 4 中提到
+
+  > When using the scope-only model, no aud (audience) claim will be added to the token, since this concept does not apply. If you need an aud claim, you can enable the EmitStaticAudience setting on the options. This will emit an aud claim in the issuer_name/resources format. If you need more control of the aud claim, use API resources.
+
+EmitStaticAudience=true启用后默认aud=issuer_name/resources
+
+还有[QAStack](https://qastack.cn/programming/28418360/jwt-json-web-token-audience-aud-versus-client-id-whats-the-difference)中的回答：
+
+  > JWT将包含一个aud声明，该声明指定JWT适用于哪些资源服务器。如果aud包含www.myfunwebapp.com，但客户端应用程序尝试在上使用JWT www.supersecretwebapp.com，则访问将被拒绝，因为该资源服务器将看到JWT并不适合它。
+
+例如，当某ApiResourse的scope包含XXX.read，某ApiClient也包含该scope，请求的access token的aud将包含apiresourse的name。
+
+[Identity Server 4 ClientCredentials with POSTMAN](https://www.mrjamiebowman.com/microservices/identity-server-4-clientcredentials-with-postman/) 非常简单易懂的项目，有源码，可以作为入门。
+
+
+API 资源服务中设置
+
+```csharp
+ .AddJwtBearer("Bearer", options =>
+           {
+               options.Authority = "https://localhost:5001";
+
+               options.TokenValidationParameters = new TokenValidationParameters
+               {
+                   ValidateAudience = true
+               };
+
+               // if you are using API resources, you can specify the name here
+               // options.Audience = "https://localhost:5001/resources";
+                options.Audience = "StaffApi";
+               // IdentityServer emits a typ header by default, recommended extra check
+               options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+           });
+```
+
+表示该API服务的受众是某个授权中心，用户请求的令牌中的aud需与此一致。
+
+## Claims
+
+[Understanding Claims](https://stackoverflow.com/questions/37067938/understanding-claims)提到
+
+> Scopes are identifiers used to specify what access privileges are being requested. Claims are name/value pairs that contain information about a user.
+
+  So an example of a good scope would be "read_only". Whilst an example of a claim would be "email": "john.smith@example.com".
+
+scope代表该token的权限范围，claims 代表user信息。
+
+
+
 ## Scoped
 ids 4 配置 Client Scoped , 客户端（web）通过disconvery 中的 endpoint 发送授权请求，其中request 中 scoped会与ids4中已注册的ApiScoped比较并放入claims，返回granted code 或 access token
 
@@ -51,30 +110,63 @@ ids 4 配置 Client Scoped , 客户端（web）通过disconvery 中的 endpoint 
     ```
     aspnetcore webapi 搭建微服务，利用第三方依赖包注册服务，并指定授权服务，ApiName 对应已注册的API Resources，最后在pipline中调用
 
-  4. Client Credentials flow 中不建议根据Scope来限制访问
+4. Client Credentials flow 中不建议根据Scope来限制访问
 
-      [Client Credentials](https://www.oauth.com/oauth2-servers/access-tokens/client-credentials/)
+    [Client Credentials](https://www.oauth.com/oauth2-servers/access-tokens/client-credentials/)
 
-      > scope (optional)
-      > Your service can support different scopes for the client credentials grant. In practice, not many services actually support this.
+    > scope (optional)
+    > Your service can support different scopes for the client credentials grant. In practice, not many services actually support this.
 
-      [Authorization based on Scopes and other Claims](https://docs.duendesoftware.com/identityserver/v5/apis/aspnetcore/authorization/)中建议
+    [Authorization based on Scopes and other Claims](https://docs.duendesoftware.com/identityserver/v5/apis/aspnetcore/authorization/)中建议
 
-      ```csharp
-      services.AddAuthorization(options =>
-      {
-          options.AddPolicy("StaffRead", policy => policy.RequireClaim(JwtClaimTypes.Scope, "staffApi.read"));
-          options.AddPolicy("Staff", policy => policy.RequireClaim(JwtClaimTypes.Scope, "staffApi.read","staffApi.write"));
-      });
-      ```
+    ```csharp
+    services.AddAuthorization(options =>
+    {
+        options.AddPolicy("StaffRead", policy => policy.RequireClaim(JwtClaimTypes.Scope, "staffApi.read"));
+        options.AddPolicy("Staff", policy => policy.RequireClaim(JwtClaimTypes.Scope, "staffApi.read","staffApi.write"));
+    });
+    ```
 
-      ```csharp
-      [Authorize(Policy ="Staff")]
-      ```
+    ```csharp
+    [Authorize(Policy ="Staff")]
+    ```
 
-  5. AddJwtBearer
+5. AddJwtBearer
 
-      AddJwtBearer  从header中提取和验证jwt token
+   AddJwtBearer  从header中提取和验证jwt token
+
+6. client credential grant 客户端授权将无法获取userinfo，返回Forbidden
+[Get UserInfo from Access Token - "Forbidden"](https://stackoverflow.com/questions/54145970/get-userinfo-from-access-token-forbidden)
+
+7. client credentials 授权时利用Client中的claim中的role结合Policy限制访问，但不建议，应采用 Policy-Base 比较适合。
+
+  claim 针对用户的信息，键值对。
+
+  scope 针对token 可以访问的范围
+
+  role 针对user identity 的信息
+
+  所以下面的方案并不适合客户端授权
+
+  ```csharp
+     new Client
+        {
+            ClientId = "x",
+            ClientName = "x Api",
+            AllowedGrantTypes = GrantTypes.ClientCredentials,
+            ClientSecrets = new List<Secret> {new Secret("xxx".Sha256())},
+            AllowedScopes = new List<string> {
+                "staffApi.read"},
+            Claims = new List<ClientClaim>{ new ClientClaim(JwtClaimTypes.Role, "Staff") }
+        },
+  ```
+
+  ```csharp
+    options.AddPolicy("Staff", policy => policy.RequireClaim("client_role", "Staff"));
+  ```
+
+
+
 
 [IdentityServer4 in ASP.NET Core – Ultimate Beginner’s Guide](https://codewithmukesh.com/blog/identityserver4-in-aspnet-core/)
 
