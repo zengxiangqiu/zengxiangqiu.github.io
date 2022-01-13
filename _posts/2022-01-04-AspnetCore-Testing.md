@@ -233,6 +233,8 @@ tags: [test]
 
   需要在测试项目中重写
 
+  For SUTs that still use the Web Host, the test app's builder.ConfigureServices callback is executed before the SUT's Startup.ConfigureServices code. The test app's **builder.ConfigureTestServices** callback is executed **after**.
+
   ```csharp
   // Overwrite registrations from Startup.cs
   builder.ConfigureTestServices(serviceCollection =>

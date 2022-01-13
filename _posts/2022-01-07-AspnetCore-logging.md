@@ -11,6 +11,13 @@ tags: [logging]
 
   When a LogLevel is specified, logging is enabled for messages at **the specified level and higher**.
 
+  常见的 logLevel categories
+
+  [ASP.NET Core and EF Core categories](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-6.0#aspnet-core-and-ef-core-categories)
+
+  [Suppress SQL Queries logging in Entity Framework core](https://stackoverflow.com/questions/42079956/suppress-sql-queries-logging-in-entity-framework-core)
+
+
   ```json
   {
     "Logging": {
@@ -95,7 +102,16 @@ tags: [logging]
   }
   ```
 
+## CorrelationId
 
+![Logging Between Multiple MicroService ](https://csharpcorner-mindcrackerinc.netdna-ssl.com/article/logging-and-tracing-in-multiple-microservice-with-correlation-using-net-core/Images/requestflowdiagram.png)
+
+
+[Request Tracing And Logging Between Multiple MicroService With Correlation Id Using Serilog In .NET Core](https://www.c-sharpcorner.com/article/logging-and-tracing-in-multiple-microservice-with-correlation-using-net-core/)
+
+利用中间件和header中的correlationId记录日志
 ## 参考
 
 [Improving logging performance with source generators](https://andrewlock.net/exploring-dotnet-6-part-8-improving-logging-performance-with-source-generators/)
+
+[Logging Guidelines and Best Practices for RESTful API](https://www.pritambaldota.com/logging-guidelines-and-best-practices-for-restful-api/)
