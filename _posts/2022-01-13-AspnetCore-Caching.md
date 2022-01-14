@@ -23,7 +23,7 @@ Absolute Expiration 绝对过期，表示到了这个时间会被驱逐
 2. 应限制缓存数据的生长
 3. 合理设置过期日期
 
-分布式缓存 可以参考 [Distributed Caching in ASP.NET Core with Redis](https://sahansera.dev/distributed-caching-aspnet-core-redis/)，注意，项目中引入了[SemaphoreSlim](./#SemaphoreSlim)，避免资源争用。
+分布式缓存 可以参考 [Distributed Caching in ASP.NET Core with Redis](https://sahansera.dev/distributed-caching-aspnet-core-redis/)，注意，项目中引入了[SemaphoreSlim](/#SemaphoreSlim)，避免资源争用。
 
 
 
