@@ -1,3 +1,9 @@
+---
+title: "AspnetCore FluentValidator"
+date:  2022-01-14 16:29:46 +0800
+categories: [AspnetCore]
+tags: [FluentValidator]
+---
 
 传统上，.NET中的大多数验证都是使用数据注释来完成的
 ```CSharp

@@ -1,7 +1,7 @@
 ---
 title: "AspnetCore Testing"
 date:  2022-01-04 14:55:42 +0800
-categories: [DevOps]
+categories: [AspnetCore]
 tags: [test]
 ---
 

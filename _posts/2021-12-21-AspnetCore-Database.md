@@ -45,7 +45,7 @@ dotnet ef migration 工具首先尝试通过调用 Program.CreateHostBuilder()�
 
  * Single navigation property
 
-  ```CSharp
+  ```csharp
   public List<Post> Posts { get; set; }
   ...
   public int **PostId** { get; set; }
@@ -53,7 +53,7 @@ dotnet ef migration 工具首先尝试通过调用 Program.CreateHostBuilder()�
 
  * Manual configuration
 
-    ```CSharp
+    ```csharp
     modelBuilder.Entity<Post>()
       .HasOne(p => p.Blog)
       .WithMany(b => b.Posts)
@@ -61,6 +61,7 @@ dotnet ef migration 工具首先尝试通过调用 Program.CreateHostBuilder()�
       .OnDelete(DeleteBehavior.Cascade);
       ;
     ```
+
 
 
 

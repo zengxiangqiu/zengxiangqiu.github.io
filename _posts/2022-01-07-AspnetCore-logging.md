@@ -1,7 +1,7 @@
 ---
 title: "AspnetCore logging"
 date:  2022-01-07 11:34:53 +0800
-categories: [DevOps]
+categories: [AspnetCore]
 tags: [logging]
 ---
 
