@@ -28,7 +28,7 @@ Absolute Expiration 绝对过期，表示到了这个时间会被驱逐
 
 
 
-## SemaphoreSlim
+## 1. SemaphoreSlim
 
 Semaphores are of two types: local semaphores and named system semaphores.
 
@@ -47,7 +47,7 @@ Semaphore中的SemaphoreRights允许当前用户修改访问权限
 
 
 
-## BackgroundService
+## 2. BackgroundService
 
 AddHostedService 注册为 sigleton，集成BackgroundService 类。
 
