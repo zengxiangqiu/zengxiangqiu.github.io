@@ -12,7 +12,7 @@ Net core 3.1 之后，不允许在ConfigureServices中解析ILogger或IConfigura
 
 ## Serilog
 
-引用`Serilog.Extensions.Hosting` ,`UseSerilog`注入SerilogLoggerFactory(继承ILoggerFactory)
+引用`Serilog.Extensions.Hosting` ,`UseSerilog`注入SerilogLoggerFactory(继承ILoggerFactory),所以default的logger不会被加载，
 
 
 ```csharp

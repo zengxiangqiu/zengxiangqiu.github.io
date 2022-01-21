@@ -73,7 +73,9 @@ ModelValidationContext -> validator-> Validate()->result.Errors
 
 ## 参考
 
-[fluentvalidation文档](https://docs.fluentvalidation.net/en/latest/custom-validators.html)
+[fluentvalidation文档](https://docs.fluentvalidation.net/en/latest/custom-validators.htm)
+
+```l)
 
 [fluentvalidationh简单示例](https://code-maze.com/fluentvalidation-in-aspnet/)
 
