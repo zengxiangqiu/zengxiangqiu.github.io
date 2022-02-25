@@ -61,6 +61,11 @@ tags: [Bus]
 
 > There are two types of service discovery: Server-side and Client-side. Server-side service discovery allows clients applications to find services through a router or a load balancer. Client-side service discovery allows clients applications to find services by looking through or querying a service registry, in which service instances and endpoints are all within the service registry.
 
+1. 服务实例
+2. 服务注册表
+
+客户端发现
+
 服务发现分服务端和客户端
 
 1. 服务端发现
@@ -70,6 +75,8 @@ tags: [Bus]
 2. 客户端发现
 
   客户端访问**服务注册表**，获取可用**服务列表** 然后客户端使用一种负载均衡算法选择一个可用的服务实例然后发起请求。
+
+  服务注册和客户端耦合，不同语言的客户端，需要开发不同版本的组件与服务注册中心对接
 
 
 服务注册表
