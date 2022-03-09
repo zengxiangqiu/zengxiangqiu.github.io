@@ -9,7 +9,6 @@ tags: [部署]]
 
 在本机Ubuntu/Windows利用OpenSSL生成自签名的CA root证书(Ubuntu认crt格式)，
 利用该证书签发IdentityServer和api项目证书（apsnetcore认pfx格式）
-生成证书及转换见[OpenSSL教程](/HTTPS)
 分别将ca证书和pfx挂载到对应的docker容器中，并让容器信任该ca证书
 
 如果出现partialchain问题，可以进入容器`apt-get update`安装curl`apt-get install curl`执行检查`curl -v IP：prot`

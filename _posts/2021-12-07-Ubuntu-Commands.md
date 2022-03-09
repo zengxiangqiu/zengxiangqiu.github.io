@@ -23,7 +23,7 @@ On the other hand, a process will stop when the terminal closes because it is an
 [不休眠]https://askubuntu.com/questions/47311/how-do-i-disable-my-system-from-going-to-sleep
 [APT vs APT-GET: What's the Difference?](https://phoenixnap.com/kb/apt-vs-apt-get)
 [Getting started with Docker: Running an Ubuntu Image](https://dev.to/netk/getting-started-with-docker-running-an-ubuntu-image-4lk9#:~:text=To%20exit%20the%20container%20simply%20type%20exit%20from,Docker%20console%20when%20you%20created%20the%20Ubuntu%20container.)
-[](https://dev.to/netk/getting-started-with-docker-running-an-ubuntu-image-4lk9)
+[docker run image ](https://dev.to/netk/getting-started-with-docker-running-an-ubuntu-image-4lk9)
 [Copy file](https://www.cyberciti.biz/faq/ubuntu-copy-file-command/)
 [简单性能监控](https://www.howtoforge.com/tutorial/ubuntu-performance-monitoring/#:~:text=How%20to%20monitor%20your%20system%20performance%20on%20%28Ubuntu%29,type%20%E2%80%9Ctop%E2%80%9D%20and%20hit%20enter.%203%20Lm-sensors.%20)
 
