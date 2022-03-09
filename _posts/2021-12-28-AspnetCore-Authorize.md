@@ -5,13 +5,15 @@ categories: [AspnetCore]
 tags: [auth]
 ---
 
-## 重点
+## 1. 重点
 
-jwt 包括三部分，header、payload以及signature，前两部分可以被base64解析，而保证jwt不被篡改的关键在于 **signature**,因为采用了SHA256对称算法，当验证服务端（identity server）收到token时，将解析header和payload后利用密钥和算法生成对应的signature,与原token中的作比较，另外jwt中的nonce可以抵御重放攻击。
+jwt 包括三部分，header、payload以及signature，前两部分可以被base64解析，而保证jwt不被篡改的关键在于 **signature**,因为采用了SHA256hash散列算法，当验证服务端（identity server）收到token时，将解析header和payload后利用密钥和算法生成对应的signature,与原token中的作比较，另外jwt中的nonce可以抵御重放攻击。
+
+颁发令牌token之后，客户端所请求的资源范围如与jwt中的不符将不被允许，如客户端或中间人修改jwt playload base64内容，因签名不一致，将被拒绝
 
 参考[这里](https://stackoverflow.com/questions/31309759/what-is-secret-key-for-jwt-based-authentication-and-how-to-generate-it)
 
-## audience
+## 2. audience
 
 预期的受众
 
@@ -52,7 +54,7 @@ API 资源服务中设置
 
 表示该API服务的受众是某个授权中心，用户请求的令牌中的aud需与此一致。
 
-## Claims
+## 3. Claims
 
 [Understanding Claims](https://stackoverflow.com/questions/37067938/understanding-claims)提到
 
@@ -62,16 +64,14 @@ API 资源服务中设置
 
 scope代表该token的权限范围，claims 代表user信息。
 
-
-
-## Scoped
+## 4. Scoped
 ids 4 配置 Client Scoped , 客户端（web）通过disconvery 中的 endpoint 发送授权请求，其中request 中 scoped会与ids4中已注册的ApiScoped比较并放入claims，返回granted code 或 access token
 
 客户端 再 利用access token 请求 资源，资源服务（microservice） 通过[Authorize] 和[RequiredScope] 验证 token 中scope 是否符合。
 
 [Secure Applications with OAuth2 and OpenID Connect in ASP.NET Core 5 – Complete Guide](https://procodeguide.com/programming/oauth2-and-openid-connect-in-aspnet-core/) 详尽地介绍了OpenID Connection和OAuth 2.0 ，并结合identity server 4 讲解原理，可读性高，又源码，可以细读学习。
 
-## 笔记
+## 5. 笔记
 1. **Identity Resources** are some standard open id connect scopes...
 
     用户身份识别的内容，比如email，profile，website等等
@@ -89,47 +89,52 @@ ids 4 配置 Client Scoped , 客户端（web）通过disconvery 中的 endpoint 
         },
     ```
 
+3. api服务端
 
+This Authentication configuration will make use of the discovery document on startup to configure the security for this API
 
-3. This Authentication configuration will make use of the discovery document on startup to configure the security for this API
-    ```
-    Install-Package IdentityServer4.AccessTokenValidation
-    ```
+api服务利用 ids4 发现文档 知道endpoints，比如验证 token是否有效等
 
-    ```csharp
-    services.AddAuthentication("Bearer")
-    .AddIdentityServerAuthentication("Bearer", options =>
-    {
-        options.ApiName = "weatherApi";
-        options.Authority = "https://localhost:44343";
-    });
-    ```
+当客户端（网页/手机）请求资源时，必须带上token
 
-    ```csharp
-    app.UseAuthorization();
-    ```
-    aspnetcore webapi 搭建微服务，利用第三方依赖包注册服务，并指定授权服务，ApiName 对应已注册的API Resources，最后在pipline中调用
+```nuget
+Install-Package IdentityServer4.AccessTokenValidation
+```
+
+```csharp
+services.AddAuthentication("Bearer")
+.AddIdentityServerAuthentication("Bearer", options =>
+{
+  options.ApiName = "weatherApi";
+  options.Authority = "https://localhost:44343";
+});
+```
+
+```csharp
+app.UseAuthorization();
+```
+ApiName 对应已注册的API Resources，最后在pipline中调用
 
 4. Client Credentials flow 中不建议根据Scope来限制访问
 
-    [Client Credentials](https://www.oauth.com/oauth2-servers/access-tokens/client-credentials/)
+[Client Credentials](https://www.oauth.com/oauth2-servers/access-tokens/client-credentials/)
 
-    > scope (optional)
-    > Your service can support different scopes for the client credentials grant. In practice, not many services actually support this.
+> scope (optional)
+> Your service can support different scopes for the client credentials grant. In practice, not many services actually support this.
 
-    [Authorization based on Scopes and other Claims](https://docs.duendesoftware.com/identityserver/v5/apis/aspnetcore/authorization/)中建议
+[Authorization based on Scopes and other Claims](https://docs.duendesoftware.com/identityserver/v5/apis/aspnetcore/authorization/)中建议
 
-    ```csharp
-    services.AddAuthorization(options =>
-    {
-        options.AddPolicy("StaffRead", policy => policy.RequireClaim(JwtClaimTypes.Scope, "staffApi.read"));
-        options.AddPolicy("Staff", policy => policy.RequireClaim(JwtClaimTypes.Scope, "staffApi.read","staffApi.write"));
-    });
-    ```
+```csharp
+services.AddAuthorization(options =>
+{
+  options.AddPolicy("StaffRead", policy => policy.RequireClaim(JwtClaimTypes.Scope, "staffApi.read"));
+  options.AddPolicy("Staff", policy => policy.RequireClaim(JwtClaimTypes.Scope, "staffApi.read","staffApi.write"));
+});
+```
 
-    ```csharp
-    [Authorize(Policy ="Staff")]
-    ```
+```csharp
+[Authorize(Policy ="Staff")]
+```
 
 5. AddJwtBearer
 
@@ -140,33 +145,56 @@ ids 4 配置 Client Scoped , 客户端（web）通过disconvery 中的 endpoint 
 
 7. client credentials 授权时利用Client中的claim中的role结合Policy限制访问，但不建议，应采用 Policy-Base 比较适合。
 
-  claim 针对用户的信息，键值对。
+claim 针对用户的信息，键值对。
 
-  scope 针对token 可以访问的范围
+scope 针对token 可以访问的范围
 
-  role 针对user identity 的信息
+role 针对user identity 的信息
 
-  所以下面的方案并不适合客户端授权
+所以下面的方案并不适合客户端授权
 
-  ```csharp
-     new Client
-        {
-            ClientId = "x",
-            ClientName = "x Api",
-            AllowedGrantTypes = GrantTypes.ClientCredentials,
-            ClientSecrets = new List<Secret> {new Secret("xxx".Sha256())},
-            AllowedScopes = new List<string> {
-                "staffApi.read"},
-            Claims = new List<ClientClaim>{ new ClientClaim(JwtClaimTypes.Role, "Staff") }
-        },
-  ```
+```csharp
+  new Client
+     {
+         ClientId = "x",
+         ClientName = "x Api",
+         AllowedGrantTypes = GrantTypes.ClientCredentials,
+         ClientSecrets = new List<Secret> {new Secret("xxx".Sha256())},
+         AllowedScopes = new List<string> {
+             "staffApi.read"},
+         Claims = new List<ClientClaim>{ new ClientClaim(JwtClaimTypes.Role, "Staff") }
+     },
+```
 
-  ```csharp
-    options.AddPolicy("Staff", policy => policy.RequireClaim("client_role", "Staff"));
-  ```
+```csharp
+ options.AddPolicy("Staff", policy => policy.RequireClaim("client_role", "Staff"));
+```
 
+8. 在不同局域/DNS的部署Identity和其他服务，出现 The remote certificate is invalid according to the validation procedure: RemoteCertificateNameMismatch
 
+参考 [RemoteCertificateNameMismatch](https://stackoverflow.com/questions/68268568/c-sharp-the-remote-certificate-is-invalid-according-to-the-validation-procedure)
 
+> I suspect that remote certificate is issued against some DNS name, but you are connecting to IP address which apparently isn't specified in certificate subject/SAN extension.
+
+9. 返回200，但无内容
+
+在ExceptionMiddleware 中错误被拦截，context.status  = 200
+
+内部报错： The MetadataAddress or Authority must use HTTPS unless disabled for development by setting RequireHttpsMetadata=false.
+
+只用于开发环境
+
+```csharp
+.AddJwtBearer("Bearer", options =>
+           {
+               options.Authority = Configuration.GetSection("Identity")["Authority"];
+
+               //This should be disabled only in development environments
+               options.RequireHttpsMetadata = false;
+            }
+```
+
+## 6. 参考
 
 [IdentityServer4 in ASP.NET Core – Ultimate Beginner’s Guide](https://codewithmukesh.com/blog/identityserver4-in-aspnet-core/)
 
