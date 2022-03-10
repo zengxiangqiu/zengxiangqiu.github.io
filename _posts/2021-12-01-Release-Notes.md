@@ -2,7 +2,7 @@
 title: "Release Notes"
 date:  2021-12-01 17:41:51 +0800
 categories: [DevOps]
-tags: [release]
+tags: [发布]
 ---
 
 1. Use Plain Language: Eliminate technical jargon and overly complex language.

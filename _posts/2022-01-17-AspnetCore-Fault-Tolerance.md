@@ -2,7 +2,7 @@
 title: "AspnetCore Fault Tolerance"
 date:  2022-01-17 15:53:28 +0800
 categories: [AspnetCore]
-tags: [Tolerance]
+tags: [容灾]
 ---
 
 # 1. 容错

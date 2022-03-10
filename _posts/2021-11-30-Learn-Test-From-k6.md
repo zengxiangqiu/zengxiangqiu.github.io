@@ -1,8 +1,8 @@
 ---
 title: "Learn Test From k6"
 date:  2021-11-30 14:35:16 +0800
-categories: [Test]
-tags: [DevOps]
+categories: [DevOps]
+tags: [测试]
 ---
 
 

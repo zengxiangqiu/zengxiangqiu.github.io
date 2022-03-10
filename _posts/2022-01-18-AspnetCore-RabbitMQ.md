@@ -1,7 +1,7 @@
 ---
 title: "AspnetCore RabbitMQ"
 date:  2022-01-18 14:30:20 +0800
-categories: [AspNetCore]
+categories: [AspnetCore]
 tags: [rabbitmq]
 ---
 

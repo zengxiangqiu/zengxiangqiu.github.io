@@ -1,8 +1,8 @@
 ---
 title: "visual studio 常见问题"
 date:  2022-01-19 14:25:58 +0800
-categories: [IDE]
-tags: [ide]
+categories: [其他]
+tags: [IDE]
 ---
 
 1. vs 2022 安装后启动卡在重启的界面

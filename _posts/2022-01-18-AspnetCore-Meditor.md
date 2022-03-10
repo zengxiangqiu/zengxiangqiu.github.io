@@ -2,7 +2,7 @@
 title: "AspnetCore Meditor"
 date:  2022-01-18 14:51:34 +0800
 categories: [AspnetCore]
-tags: [meditor]
+tags: [中介者模式]
 ---
 
 ## 1. 源码

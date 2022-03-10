@@ -2,7 +2,7 @@
 title: "AspnetCore HealthCheck"
 date:  2022-01-17 17:46:45 +0800
 categories: [AspnetCore]
-tags: [healthcheck]
+tags: [健康检查]
 ---
 
 

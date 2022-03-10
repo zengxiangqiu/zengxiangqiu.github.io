@@ -2,7 +2,7 @@
 title: "AspnetCore Configuration"
 date:  2022-02-23 11:01:15 +0800
 categories: [AspnetCore]
-tags: [Configuration]
+tags: [配置]
 ---
 
 [How to use the IOptions pattern for configuration in ASP.NET Core RC2](https://andrewlock.net/how-to-use-the-ioptions-pattern-for-configuration-in-asp-net-core-rc2/)

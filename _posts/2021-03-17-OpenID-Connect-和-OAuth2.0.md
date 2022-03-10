@@ -1,8 +1,8 @@
 ---
 title: "OpenID Connect 和 OAuth2.0"
 date:  2021-12-10 17:53:31 +0800
-categories: [DevOps]
-tags: [OAuth2]
+categories: [授权认证]
+tags: [OAuth2,OpenID]
 ---
 
 ## OAuth2.0 获取授权

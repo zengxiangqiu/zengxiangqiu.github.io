@@ -2,7 +2,7 @@
 title: "AspnetCore Caching"
 date:  2022-01-13 15:16:40 +0800
 categories: [AspnetCore]
-tags: [Caching]
+tags: [缓存]
 ---
 
 考虑竞争，引入CacheSignal，内部实现是SemaphoreSlim

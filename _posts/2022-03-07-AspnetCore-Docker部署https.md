@@ -2,7 +2,7 @@
 title: "AspnetCore Docker部署https"
 date:  2022-03-07 15:05:33 +0800
 categories: [AspnetCore]
-tags: [部署]]
+tags: [部署]
 ---
 
 ## 1. 证书

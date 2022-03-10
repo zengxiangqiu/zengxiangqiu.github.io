@@ -1,8 +1,8 @@
 ---
 title: "DotnetCore CLI"
 date:  2021-12-21 15:20:16 +0800
-categories: [DotnetCore]
-tags: [CLI]
+categories: [其他]
+tags: [工具]
 ---
 
 dotnet CLI

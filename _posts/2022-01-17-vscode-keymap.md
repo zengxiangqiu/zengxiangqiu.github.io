@@ -1,8 +1,8 @@
 ---
 title: "vscode keymap"
 date:  2022-01-17 11:54:11 +0800
-categories: [vscode]
-tags: [keymap]
+categories: [其他]
+tags: [工具]
 ---
 
 # 1. 折叠

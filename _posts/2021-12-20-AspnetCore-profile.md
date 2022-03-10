@@ -2,7 +2,7 @@
 title: "AspnetCore Middleware Components"
 date:  2021-12-20 11:52:29 +0800
 categories: [AspnetCore]
-tags: [Middleware]
+tags: [中间件]
 ---
 
 ## service

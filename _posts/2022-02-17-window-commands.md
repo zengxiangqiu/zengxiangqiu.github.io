@@ -1,8 +1,8 @@
 ---
 title: "window commands"
 date:  2022-02-17 12:19:45 +0800
-categories: [command]
-tags: [command]
+categories: [其他]
+tags: [工具]
 ---
 
 

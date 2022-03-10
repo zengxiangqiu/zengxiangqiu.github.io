@@ -2,7 +2,7 @@
 title: "AspnetCore Testing"
 date:  2022-01-04 14:55:42 +0800
 categories: [AspnetCore]
-tags: [test]
+tags: [测试]
 ---
 
 ## 常见的三种测试
