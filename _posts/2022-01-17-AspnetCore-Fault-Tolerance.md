@@ -26,6 +26,22 @@ tags: [容灾]
 
 # 2. 限流(Rate Limiting/Load Shedder)
 
+分速率限流（rate limit）和节流 （throttle）
+
+速率限流利用队列控制访问资源的速率，节流则利用Semaphore信号量控制并发线程，达到瓶颈时服务降级
+
+```csharp
+var semaphoreSlim = new SemaphoreSlim(
+  initialCount: 10,
+  maxCount: 10);
+
+await semaphoreSlim.WaitAsync();
+
+semaphoreSlim.Release();
+```
+
+[Semaphore控制并发](https://josef.codes/c-sharp-throttle-http-requests-concurrent/)
+
 ## 2.1. 熔断
 
 ## 2.2. 限流算法
@@ -52,5 +68,7 @@ tags: [容灾]
 [服务容错模式](https://tech.meituan.com/2016/11/11/service-fault-tolerant-pattern.html)
 
 [Token Bucket](https://www.sciencedirect.com/topics/computer-science/token-bucket)
+
+[](https://josef.codes/c-sharp-throttle-http-requests-concurrent/)
 
 

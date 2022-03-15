@@ -66,19 +66,25 @@ builder.Property(e => e.p_enabled)
 
 ## 3. 参考
 
-[Using EF Core in a Separate Class Library project](https://garywoodfine.com/using-ef-core-in-a-separate-class-library-project/)
+配置
 
-[EF Core Migrations in ASP .NET Core](https://wakeupandcode.com/ef-core-migrations-in-asp-net-core/)
+[dbcontext-configuration](https://docs.microsoft.com/zh-cn/ef/core/dbcontext-configuration/)
 
 [Implement the infrastructure persistence layer with Entity Framework Core](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-implementation-entity-framework-core) 针对DDD 开发展开讨论
 
 [Modular Architecture in ASP.NET Core – Building Better Monoliths](https://codewithmukesh.com/blog/modular-architecture-in-aspnet-core/)
 
-[dbcontext-configuration](https://docs.microsoft.com/zh-cn/ef/core/dbcontext-configuration/)
 
 [dotnet-core-cli](https://docs.microsoft.com/zh-cn/ef/core/cli/dbcontext-creation?tabs=dotnet-core-cli)
 
-[HOW DOES ENTITY FRAMEWORK MIGRATION DEAL WITH DBCONTEXT?](https://hungdoan.com/2019/06/16/how-does-entity-framework-core-add-migrations/)
+数据迁移
 
+[Using EF Core in a Separate Class Library project](https://garywoodfine.com/using-ef-core-in-a-separate-class-library-project/)
 
+[how does entity framework migration deal with dbcontext?](https://hungdoan.com/2019/06/16/how-does-entity-framework-core-add-migrations/)
 
+[EF Core Migrations in ASP .NET Core](https://wakeupandcode.com/ef-core-migrations-in-asp-net-core/)
+
+上下文
+
+[Managing DbContext the right way with Entity Framework 6: an in-depth guide](https://mehdi.me/ambient-dbcontext-in-ef6/)
