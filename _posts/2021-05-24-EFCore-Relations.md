@@ -2,7 +2,7 @@
 ---
 title: "EFCore Relations"
 date:  2021-12-21 15:14:44 +0800
-categories: [AspnetCore]]
+categories: [AspnetCore]
 tags: [EFCore]
 ---
 

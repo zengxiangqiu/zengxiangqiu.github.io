@@ -9,7 +9,7 @@ tags: [redis,middlerware]
 
 Yes, colon sign : is a convention when naming keys. In this tutorial on redis website is stated: Try to stick with a schema. For instance "object-type:id:field" can be a nice idea, like in "user:1000:password". I like to use dots for multi-words fields, like in "comment:1234:reply.to".
 
-[Redis key naming conventions? [closed]](https://stackoverflow.com/questions/6965451/redis-key-naming-conventions)
+[Redis key naming conventions? ](https://stackoverflow.com/questions/6965451/redis-key-naming-conventions)
 
 
 ## 2. 第三方依赖库
