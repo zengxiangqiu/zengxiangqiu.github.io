@@ -2,7 +2,7 @@
 title: "AspnetCore Database"
 date:  2021-12-21 12:12:25 +0800
 categories: [AspnetCore]
-tags: [Database]
+tags: [database]
 ---
 
 ## 1. 分离迁移项目

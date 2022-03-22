@@ -2,7 +2,7 @@
 title:  "EF VS Dapper"
 date:   2021-03-15 11:12:27 +0800
 categories: [ORM框架]
-tags: [EF,Dapper]
+tags: [ef,dapper]
 ---
 # EF
 **优势**
