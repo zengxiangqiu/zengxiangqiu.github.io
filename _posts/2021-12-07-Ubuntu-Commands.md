@@ -10,6 +10,23 @@ As explained above, a daemon is a non-interactive program. It runs all the time,
 
 On the other hand, a process will stop when the terminal closes because it is an executing program instance.
 
+## 远程
+1. telnet
+2. FTP
+
+   不安全，它们在网络上用明文传送口令和数据，中间人攻击
+
+3. ssh
+
+   Secure Shell 完全外壳协议
+
+   OpenSSH 是SSH的实现
+### 远程桌面
+
+1. Virtual Network Computing (VNC)
+
+
+
 [What is a Daemon?](https://www.liquidweb.com/kb/what-is-a-daemon/)
 
 
