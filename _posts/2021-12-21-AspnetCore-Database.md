@@ -64,6 +64,15 @@ builder.Property(e => e.p_enabled)
 ```
 
 
+3.EnsureCreated 和 migrations
+
+EnsureCreated 和 Migrations 不能很好地协同工作。 如果使用 Migrations，请勿使用 EnsureCreated 初始化架构。
+
+请勿在 Migrate() 前调用 EnsureCreated()。 EnsureCreated() 会绕过迁移创建架构，这会导致 Migrate() 失败
+
+[在运行时应用迁移](https://docs.microsoft.com/zh-cn/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli)
+
+
 ## 3. 参考
 
 配置

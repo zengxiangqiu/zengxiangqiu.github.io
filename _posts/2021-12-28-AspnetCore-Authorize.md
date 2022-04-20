@@ -54,6 +54,22 @@ API 资源服务中设置
 
 表示该API服务的受众是某个授权中心，用户请求的令牌中的aud需与此一致。
 
+## IdentityServer4
+### discovery Document
+
+> The discovery endpoint is available via /.well-known/openid-configuration relative to the base address of your Token Server
+
+在docker中运行的ids4,discovery endpoint link 显示问题,因为docker 的桥接网络和由nginx代理，所有实际的endpoint是 https://IdentityServer:5002/connect/authorize 或者 https://172.xx.xx.xxx/identityserver/connect/authorize (由nginx location rule proxy)
+
+{
+    "issuer": "https://IdentityServer:5002",
+    "jwks_uri": "https://172.xx.xx.xxx/.well-known/openid-configuration/jwks",
+    "authorization_endpoint": "https://172.xx.xx.xxx/connect/authorize",
+    ....
+}
+
+见[IdentityServer4: Building a Simple Token Server and Protecting Your ASP.NET Core APIs with JWT](https://vmsdurano.com/apiboilerplate-and-identityserver4-access-control-for-apis/)
+
 ## 3. Claims
 
 [Understanding Claims](https://stackoverflow.com/questions/37067938/understanding-claims)提到

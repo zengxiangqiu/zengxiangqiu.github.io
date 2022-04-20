@@ -85,7 +85,8 @@ Serilog.Debugging.SelfLog.Enable(msg => Debug.WriteLine(msg));
       {
         "Name": "Console",
         "Args": {
-          "restrictedToMinimumLevel": "Information"
+          "restrictedToMinimumLevel": "Information",
+          "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{SourceContext:l}] {Message}{NewLine}{Exception}"
         }
       }
     ]

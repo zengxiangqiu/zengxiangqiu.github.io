@@ -13,6 +13,139 @@ tags: [rabbitmq]
 
 长远来看，如果想让系统更具兼容性（面对抽象接口开发），MassTransit更为合适。
 
+## Topology
+
+> Topology is how message types are used to configure broker topics (exchanges in RabbitMQ) and queues.
+
+ 如何 利用 message type  配置 交换机和队列的关系
+
+ 比如，type->创建交换机 OrderSystem.Events.OrderSubmitted， 路由到交换机Order-Submitted-Event,再传递给队列Order-Submitted-Event
+
+## RabbitMQ配置
+
+rabbitmq 也就是broker，经纪人， 而masstransit 定义了broker topology(经纪人拓扑) 来 生成 交换机、队列、以及它们之间的binding关系
+
+系统与rabbitmq交互，不会直接发信息到queue，而是经过exchange路由到queue
+
+举例
+
+```csharp
+namespace OrderSystem.Events
+{
+  public interface OrderSubmitted
+  {
+      string OrderId { get; }
+      DateTime OrderDate { get; }
+  }
+}
+
+class OrderSubmittedEventConsumer :
+    IConsumer<OrderSubmitted>
+{
+    public async Task Consume(ConsumeContext<OrderSubmitted> context)
+    {
+        ....
+    }
+}
+
+services.AddMassTransit(x =>
+{
+    x.AddConsumer<OrderSubmittedEventConsumer>();
+
+    //Default = OrderSubmittedEvent; Snake Case= Order_Submitted_Event;Kebab Case	= Order-Submitted-Event
+    x.SetKebabCaseEndpointNameFormatter();
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.ReceiveEndpoint("order-events-listener", e =>
+        {
+            e.ConfigureConsumer<OrderSubmittedEventConsumer>(context);
+        });
+    });
+    /*endpoint queue name 等于 OrderSubmittedEvent
+    x.UsingRabbitMq((context, cfg) => cfg.ConfigureEndpoints(context));
+
+    DiscardFaultedMessages 发送错误不入 _error 队列
+    DiscardSkippedMessages 没有consumer，不入 _skipped 队列
+    */
+});
+```
+
+message type ：OrderSystem.Events.OrderSubmitted
+consumer : OrderSubmittedEventConsumer
+queue： order-events-listener
+
+> AspnetCore,Using the ConfigureEndpoints method will automatically create a receive endpoint for every added consumer
+
+因为message type会创建exchange，所以即使没有consumer在该项目中，也能利用message topology send/publish 到 exchange ，但没有queue绑定
+
+再在另外一个项目中定义consumer，这时会创建另一个exchange和queue，这样就可以打通和上一个项目的通道。
+
+### Send
+
+Send 的方式有三种
+1. ConsumeContext
+2. ISendEndpointProvider
+3. IBus
+
+后面两种是Di解析出来的，所有需要提前注入，第一种是在Consume的同时利用上下文Send出去
+
+masstransit **Send**信息到 rabbitmq 终端地址有两种
+
+exchange:order-events-listener
+
+如exchange不存在，自动创建
+
+queue:order-events-listener
+
+如exchange或queue不存在，会创建同名的exchange和queue并binding
+
+### Publish
+
+**published**信息到 rabbitmq 的话
+
+方式有三种
+1. ConsumeContext
+2. IPublishEndpoint
+3. IBus
+
+```csharp
+await publishEndpoint.Publish<OrderSubmitted>(new
+{
+  OrderId = "27",
+  OrderDate = DateTime.UtcNow,
+});
+```
+
+如exchange不存在，自动创建 exchange OrderSystem.Events:OrderSubmitted,这个exchange会绑定另外一个exchange order-events-listener,消息再路由到 queue order-events-listener
+
+### Send vs Publish
+
+A command tells a service to do something.
+
+An event signifies that something has happened.
+
+
+message name 主要分两种， Commands 用send， Events 用Publish
+
+Commands
+- UpdateCustomerAddress
+- UpgradeCustomerAccount
+- SubmitOrder
+
+Events
+- CustomerAddressUpdated
+- CustomerAccountUpgraded
+- OrderSubmitted, OrderAccepted, OrderRejected, OrderShipped
+
+
+自动创建exchange和queue会根据首字母大小写加分隔符 比如 OrderSubmittedEventConsumer  = Order-Submitted-Event
+
+### 异常
+
+1. 当没有consumer时，send/publish message to exchange,会被放置在Order-Submitted-Event_skipped 队列
+2. 当aspnetcore 在consume 中throw exception，会被放置在 Order-Submitted-Event_error 队列
+
 ## 基本用法
 
 ### AddMassTransit

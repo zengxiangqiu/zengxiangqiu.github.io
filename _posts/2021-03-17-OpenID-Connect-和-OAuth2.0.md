@@ -15,13 +15,15 @@ OAuth is an open authorization protocol
 
 ## OpenID Connect
 OpenID Connect将身份验证实现为OAuth 2.0授权过程的扩展
-1. Authorisation code flow - 代码流，跳转到授权页面，allow后OP发送code到RP指定的url，RP 后台通过code 再向OP获取id_token和access_token，通过id_token访问UserInfo端点，获取授权码必须走TLS
+1. Authorisation code flow - 代码流，跳转到授权页面，allow后OP发送code到RP指定的url，RP 后台通过code 再向OP获取id_token和access_token，通过access_token访问UserInfo端点，**获取授权码必须走TLS**
 
-> 注意: scope中必须包含openid范围值
+[userinfo](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo)中提到
+> Communication with the UserInfo Endpoint MUST utilize TLS
 
-2. Implicit flow - 隐式流，比如js网站，无后台，授权后直接返回id_token和access_token给RP，易暴露
-3. Hybrid flow - 混合流，一些令牌是由授权端点返回的，而其他令牌是从令牌端点返回的
+> 注意: scope中必须包含openid范围值,即scope = 'openid...'
 
+1. Implicit flow - 隐式流，比如js网站，无后台，授权后直接返回id_token和access_token给RP，易暴露
+2. Hybrid flow - 混合流，一些令牌是由授权端点返回的，而其他令牌是从令牌端点返回的
 
 ## ID token
 1. sub-subject, 用户身份

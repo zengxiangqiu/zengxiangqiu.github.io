@@ -13,3 +13,30 @@ tags: [配置]
 4. Unforunately while the binder can bind any properties which are a type that derives from IDictionary<,>, it will not bind an IDictionary<,> property directly.
 5. but I guess the common use case is you will be exposing List<> and IList<> etc. Feels like they should be looking for IList<> if that is what they need though!
 
+
+
+## Kestrel
+
+[终结点配置](https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/configuration)
+
+```json
+{
+  "Kestrel": {
+    "Endpoints": {
+      "Http": {
+        "Url": "http://localhost:5000"
+      },
+      "Https": {
+        "Url": "https://localhost:5001"
+      },
+      "Grpc": {
+        "Url": "http://localhost:5002",
+        "Protocols": "Http2"
+      }
+    }
+  }
+}
+```
+
+https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel/endpoints
+
