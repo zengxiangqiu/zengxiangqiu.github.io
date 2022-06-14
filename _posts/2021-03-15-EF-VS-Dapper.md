@@ -28,3 +28,4 @@ tags: [ef,dapper]
 2. 无法跟踪变化
 
 
+[aspnetcore with dapper](https://code-maze.com/using-dapper-with-asp-net-core-web-api/)

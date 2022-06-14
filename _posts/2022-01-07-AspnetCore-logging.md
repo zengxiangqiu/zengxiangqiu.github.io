@@ -110,6 +110,8 @@ tags: [logging]
 [Request Tracing And Logging Between Multiple MicroService With Correlation Id Using Serilog In .NET Core](https://www.c-sharpcorner.com/article/logging-and-tracing-in-multiple-microservice-with-correlation-using-net-core/)
 
 利用中间件和header中的correlationId记录日志
+
+[Optimally Configuring ASP.NET Core HttpClientFactory](https://rehansaeed.com/optimally-configuring-asp-net-core-httpclientfactory/)
 ## 参考
 
 [Improving logging performance with source generators](https://andrewlock.net/exploring-dotnet-6-part-8-improving-logging-performance-with-source-generators/)

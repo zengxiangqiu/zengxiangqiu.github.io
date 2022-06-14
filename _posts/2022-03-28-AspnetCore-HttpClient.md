@@ -136,3 +136,5 @@ private readonly GitHubService _gitHubService;
 [OAuth2 with refit](https://mindbyte.nl/2021/06/02/simple-oauth2-api-authentication-with-token-caching-and-refetching-in-an-azure-function-using-identitymodel-and-refit.html)
 
 [跨微服务共享 DTO 的方法](https://softwareengineering.stackexchange.com/questions/366235/ways-to-share-dto-across-microservices)
+
+https://rehansaeed.com/optimally-configuring-asp-net-core-httpclientfactory/
