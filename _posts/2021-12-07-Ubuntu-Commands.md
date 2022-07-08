@@ -26,28 +26,33 @@ On the other hand, a process will stop when the terminal closes because it is an
 1. Virtual Network Computing (VNC)
 
 
+## ubuntu 设置dns
 
-[What is a Daemon?](https://www.liquidweb.com/kb/what-is-a-daemon/)
+1. 修改 /etc/netplan/....yaml
+
+```yaml
+network:
+  ethernets:
+    enp2s0:
+      dhcp4: false
+      addresses: [172.21.14.xxx/23]
+      gateway4: 172.21.14.x
+      nameservers:
+        addresses: [192.168.1.228,192.168.1.229,8.8.8.8]
+  version: 2
+```
+
+`sudo netplan apply`
+
+2. 安装samba
+
+修改 /etc/samba/smb.conf
+
+include = /home/samba/etc/smb.conf.lsd-server-01
 
 
-[apt update 和 apt upgrade 有什么区别](https://embeddedinventor.com/apt-update-apt-upgrade-command-explained-for-beginners/)
-
-[How To Fix “E: Could not get lock /var/lib/dpkg/lock” Error On Ubuntu](https://ostechnix.com/how-to-fix-e-could-not-get-lock-var-lib-dpkg-lock-error-on-ubuntu/)
 
 
-
-[合盖不休眠](https://blog.csdn.net/xiaoxiao133/article/details/82847936)
-[不休眠]https://askubuntu.com/questions/47311/how-do-i-disable-my-system-from-going-to-sleep
-[APT vs APT-GET: What's the Difference?](https://phoenixnap.com/kb/apt-vs-apt-get)
-[Getting started with Docker: Running an Ubuntu Image](https://dev.to/netk/getting-started-with-docker-running-an-ubuntu-image-4lk9#:~:text=To%20exit%20the%20container%20simply%20type%20exit%20from,Docker%20console%20when%20you%20created%20the%20Ubuntu%20container.)
-[docker run image ](https://dev.to/netk/getting-started-with-docker-running-an-ubuntu-image-4lk9)
-[Copy file](https://www.cyberciti.biz/faq/ubuntu-copy-file-command/)
-[简单性能监控](https://www.howtoforge.com/tutorial/ubuntu-performance-monitoring/#:~:text=How%20to%20monitor%20your%20system%20performance%20on%20%28Ubuntu%29,type%20%E2%80%9Ctop%E2%80%9D%20and%20hit%20enter.%203%20Lm-sensors.%20)
-
-[ls -ltr](https://askubuntu.com/questions/640746/difference-between-ls-l-ls-ltr-and-ll)
-
-[学习常用的命令](https://vitux.com/40-most-used-ubuntu-commands/)
-[ The Directory Tree](https://help.ubuntu.com/lts/installation-guide/armhf/apcs02.html)
 
 ## 2. 命令
 ### 2.1. netstatus
@@ -96,7 +101,25 @@ chown username filename
 
 ###  2.4. dig
 
-dig是Domain Information Groper的首字母缩写词
+1. Ubuntu Server 安装后没有网络配置
+
+`sudo systemctl restart system-networkd`
+
+`vim /etc/netplan/*.yaml`
+
+```yaml
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp3s0:
+      dhcp4: true
+```
+
+`sudo netplan apply`
+
+
+
 
 ## 3. 参考
 
@@ -104,5 +127,38 @@ dig是Domain Information Groper的首字母缩写词
 
 [How to Use the dig Command on Linux](https://www.howtogeek.com/663056/how-to-use-the-dig-command-on-linux/)
 
+[Ubuntu 通过 Netplan 配置网络教程](https://zhuanlan.zhihu.com/p/413440638)
+
+
+[What is a Daemon?](https://www.liquidweb.com/kb/what-is-a-daemon/)
+
+
+[apt update 和 apt upgrade 有什么区别](https://embeddedinventor.com/apt-update-apt-upgrade-command-explained-for-beginners/)
+
+[How To Fix “E: Could not get lock /var/lib/dpkg/lock” Error On Ubuntu](https://ostechnix.com/how-to-fix-e-could-not-get-lock-var-lib-dpkg-lock-error-on-ubuntu/)
+
+
+
+[合盖不休眠](https://blog.csdn.net/xiaoxiao133/article/details/82847936)
+
+[不休眠](https://askubuntu.com/questions/47311/how-do-i-disable-my-system-from-going-to-sleep)
+
+[APT vs APT-GET: What's the Difference?](https://phoenixnap.com/kb/apt-vs-apt-get)
+
+[Getting started with Docker: Running an Ubuntu Image](https://dev.to/netk/getting-started-with-docker-running-an-ubuntu-image-4lk9#:~:text=To%20exit%20the%20container%20simply%20type%20exit%20from,Docker%20console%20when%20you%20created%20the%20Ubuntu%20container.)
+
+[docker run image ](https://dev.to/netk/getting-started-with-docker-running-an-ubuntu-image-4lk9)
+
+[Copy file](https://www.cyberciti.biz/faq/ubuntu-copy-file-command/)
+
+[简单性能监控](https://www.howtoforge.com/tutorial/ubuntu-performance-monitoring/#:~:text=How%20to%20monitor%20your%20system%20performance%20on%20%28Ubuntu%29,type%20%E2%80%9Ctop%E2%80%9D%20and%20hit%20enter.%203%20Lm-sensors.%20)
+
+[ls -ltr](https://askubuntu.com/questions/640746/difference-between-ls-l-ls-ltr-and-ll)
+
+[学习常用的命令](https://vitux.com/40-most-used-ubuntu-commands/)
+
+[ The Directory Tree](https://help.ubuntu.com/lts/installation-guide/armhf/apcs02.html)
+
+[常用命令](https://techlog360.com/basic-ubuntu-commands-terminal-shortcuts-linux-beginner)
 
 

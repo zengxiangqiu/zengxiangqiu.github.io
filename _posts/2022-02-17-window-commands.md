@@ -10,3 +10,7 @@ tags: [工具]
 
 [如何在 Linux 中从命令行查找 CPU 核心数](https://ostechnix.com/find-number-cpu-cores-commandline-linux/#:~:text=To%20find%20out%20the%20CPU%20cores%2C%20run%20top,CPU%20core%20details%20from%20%22%20%2Fproc%2Fcpuinfo%20%22%20file.)
 
+
+`w32tm /config /manualpeerlist:"ntp1.aliyun.com" /syncfromflags:manual /reliable:yes /update`
+
+同步系统时钟
