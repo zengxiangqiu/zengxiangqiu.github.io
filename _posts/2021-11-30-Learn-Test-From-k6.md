@@ -56,3 +56,8 @@ You typically run this test to:
 * Make sure your database doesn't exhaust the allotted storage space and stops.
 * Make sure your logs don't exhaust the allotted disk storage.
 * Make sure the external services you depend on don't stop working after a certain amount of requests are executed.
+
+
+[postman测试](https://testfully.io/blog/postman-api-testing/#test-api-response-body-using-postman)
+
+

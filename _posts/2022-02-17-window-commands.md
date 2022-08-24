@@ -5,6 +5,8 @@ categories: [其他]
 tags: [工具]
 ---
 
+Windows 7 SP1 does not contain any major improvements; it’s basically a rollup of updates that have been released for the operating system since it went to manufacturing July 22 2009. If you have been diligently updating your computer through Windows Update since then, you basically have all that SP1 has to offer.
+
 
 [在 Windows 10 上查找 CPU 内核数的 4 种方法](https://www.top-password.com/blog/find-number-of-cores-in-your-cpu-on-windows-10/)
 
@@ -14,3 +16,5 @@ tags: [工具]
 `w32tm /config /manualpeerlist:"ntp1.aliyun.com" /syncfromflags:manual /reliable:yes /update`
 
 同步系统时钟
+
+
