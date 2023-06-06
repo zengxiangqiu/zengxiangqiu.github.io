@@ -14,7 +14,7 @@ tags: [kubernetes]
 kubectl get cs
 #创建deployment 以及service
 kubectl create deployment demo --image=httpd --port=80
-kubectl expose deployment demo
+kubectl expose deploy  [deployName]  --name=xxx --type=NodePort
 #services Endpoints
 kubectl get svc,ep
 #重启depolyment
@@ -169,7 +169,7 @@ Install
 ```sh
 VERSION="v1.26.0"
 wget https://github.com/kubernetes-sigs/cri-tools/releases/download/$VERSION/crictl-$VERSION-linux-amd64.tar.gz
-sudo tar zxvf crictl-$VERSION-linux-amd64.tar.gz -C
+sudo tar zxvf crictl-$VERSION-linux-amd64.tar.gz -C /usr/local/bin
 rm -f crictl-$VERSION-linux-amd64.tar.gz
 ```
 
@@ -179,7 +179,6 @@ crictl images
 crictl inspect [container_id]
 crictl inspecti [image_id]
 crictl inspectp [pod_id]
-crictl tag registry.aliyuncs.com/google_containers/pause:3.6 registry.k8s.io/pause:3.6
 ctr --namespace=k8s.io image tag  registry.aliyuncs.com/google_containers/pause:3.6 registry.k8s.io/pause:3.6
 ```
 
@@ -194,10 +193,15 @@ pull-image-on-create: false
 disable-pull-on-run: false
 
 ```
+```bash
+$ crictl ps
 
-或者
+I0605 14:56:16.720887  254196 util_unix.go:103] "Using this endpoint is deprecated, please consider using full URL format" endpoint="/run/containerd/containerd.sock" URL="unix:///run/containerd/containerd.sock"
 
-`crictl config --set runtime-endpoint=unix:///run/containerd/containerd.sock`
+$ crictl config --set runtime-endpoint=unix:///run/containerd/containerd.sock
+
+```
+
 
 ## 组件 etcd
 
@@ -462,12 +466,56 @@ yum -y install net-tools
 
 ## ingrees-nginx
 
-部署
+### 部署
+
 `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.5.1/deploy/static/provider/cloud/deploy.yaml`
 
-[Installation Guide](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start)
+### 配置
 
-[防火墙规则](https://blog.csdn.net/yucaifu1989/article/details/104683659)
+group, 捕获第n个组
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sysinfo-ingress
+  namespace: lesaunda
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - pathType: Prefix
+        path: /sysinfo/api(/|$)(.*)
+        backend:
+          service:
+            name: ls-sysinfo
+            port:
+              number: 3000
+```
+正则匹配，保留 `/api/v1/staffs`
+
+```yaml
+annotations:
+  nginx.ingress.kubernetes.io/use-regex: 'true'
+spec:
+ ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+        - path: /api/v\d+/(staffs|accounts)
+          pathType: Prefix
+          backend:
+            service:
+              name: lsd-staff-services
+              port:
+                number: 80
+
+```
+
+### 问题
 
 1. 镜像问题
 
@@ -495,9 +543,32 @@ yum -y install net-tools
 
 3. tcp 转发
 
-参考 [ingress-nginx tcp/udp 转发](https://segmentfault.com/a/1190000038582391)，
+   ```bash
+   $kubectl  -n ingress-nginx get cm
 
-https://cloud.tencent.com/developer/article/1761376
+   tcp-services               1      191d
+
+   $kubectl -n ingrees-nginx edit cm tcp-services
+
+   data:
+     "5672": rabbitmq-system/lsd-rabbitmq:5672
+   ```
+
+4. 413 request entity too large
+
+  上传文件，nginx 转发，size 超过 limit
+
+  查看`kubectl exec -n ingress-nginx  <ingress pod> cat nginx.conf|grep client_max_body_size`
+
+  `client_max_body_size 1m` default 1m
+
+  修改`kubectl  -n ingress-nginx edit cm ingress-nginx-controller`
+
+  ```yaml
+  data:
+    proxy-body-size: 10m
+  ```
+
 
 ## redis cluster
 
@@ -531,6 +602,38 @@ redis-cli -a [password] --cluster create 10.244.2.89:6379 10.244.2.90:6379 10.24
 
 访问 http://172.21.14.208:30738/
 
+
+
+###  Install as node
+
+1. `mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak`
+```bash
+$ wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo
+$ yum clean all
+$ yum makecache
+```
+`yum update`
+2. network，[安装和配置先决条件](https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes)
+3. 关闭防火墙 `systemctl disable firewall.service`
+4. setenforce 0 #关闭安全模式
+5. swapoff -a #关闭内存交换
+6. 配置docker.repo  `yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo`
+7. install containerd(preinstall runc and cni plugin), runc centos 7 自带（runc --version 1.1.7）， cni plugin flannel 由 kubelet 调度部署
+8. 配置 `/etc/yum.repos.d/kubernetes.repo`
+   ```ymal
+    [kubernetes]
+    name=Kubernetes
+    baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+    enabled=1
+    gpgcheck=1
+    repo_gpgcheck=1
+    gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+   ```
+
+9. 修改 `/etc/containerd/config.toml` 注释`disabled_plugins = [“cri”]`以及添加registry.k8s.io,docker以及自建镜像库
+10. install [cri-tools](https://github.com/kubernetes-sigs/cri-tools), 修改`vim /etc/crictl.yaml`, pull pasue3.6 以及tag
+11.  kubeadm join .....
+
 ## 参考
 
 [通过 kubeadm 安装不同版本的 K8S](https://blog.51cto.com/liqingbiao/5149544)
@@ -562,3 +665,13 @@ redis-cli -a [password] --cluster create 10.244.2.89:6379 10.244.2.90:6379 10.24
 [解决 Kubernetes 中 Pod 无法正常域名解析问题分析与 IPVS parseIP Error 问题](http://www.mydlq.club/article/78/)
 
 [coredns 官网](https://coredns.io/plugins/forward/)
+
+[Network bridge](https://wiki.archlinux.org/title/Network_bridge)
+
+[Installation Guide](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start)
+
+[防火墙规则](https://blog.csdn.net/yucaifu1989/article/details/104683659)
+
+[ingress-nginx tcp/udp 转发](https://segmentfault.com/a/1190000038582391)，
+
+[真一文搞定 ingress-nginx 的使用](https://cloud.tencent.com/developer/article/1761376)
