@@ -96,3 +96,23 @@ server {
 
 `cat /var/log/nginx/error.log`
 
+
+##  vuejs
+
+vuejs history model 情况下，刷新页面，出现404 nginx 问题
+
+进入nginx 容器
+
+`vim /etc/nginx/conf.d/default.conf`
+
+`nginx -s reload`
+
+```nginx
+location / {
+        root /usr/share/nginx/html;
+        index  index.html index.htm;
+        try_files $uri $uri/ /index.html =404;
+    }
+```
+
+[nginx的try_files指令](https://juejin.cn/post/7090038118841057293)

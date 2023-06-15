@@ -214,12 +214,15 @@ install kubeadm 时 生成 /etc/kubernetes/manifests/etcd.yaml，可以参考
 利用 etcdctl 工具查看集群成员
 
 ```sh
-ETCDCTL_API=3 /tmp/etcd-download-test/etcdctl   --cert=/etc/kubernetes/pki/etcd/server.crt    --key=/etc/kubernetes/pki/etcd/server.key  --cacert=/etc/kubernetes/pki/etcd/ca.crt   member list
 
-或者
 
 export ENDPOINTS="192.168.5.41:2379,192.168.5.45:2379,192.168.5.46:2379"
 etcdctl --write-out=table --endpoints=$ENDPOINTS member list
+
+
+ETCDCTL_API=3 etcdctl --cert /etc/kubernetes/pki/etcd/peer.crt --key /etc/kubernetes/pki/etcd/peer.key --cacert /etc/kubernetes/pki/etcd/ca.crt --endpoints https://127.0.0.1:2379 member list
+
+
 
 ```
 
@@ -569,6 +572,7 @@ spec:
     proxy-body-size: 10m
   ```
 
+  相关配置可以参考 [Kubernetes NGINX Ingress: 10 Useful Configuration Options](https://loft.sh/blog/kubernetes-nginx-ingress-10-useful-configuration-options)
 
 ## redis cluster
 
@@ -618,7 +622,7 @@ $ yum makecache
 4. setenforce 0 #关闭安全模式
 5. swapoff -a #关闭内存交换
 6. 配置docker.repo  `yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo`
-7. install containerd(preinstall runc and cni plugin), runc centos 7 自带（runc --version 1.1.7）， cni plugin flannel 由 kubelet 调度部署
+7. install containerd(preinstall runc and cni plugin), runc centos 7 自带（runc --version 1.1.7）， cni plugin flannel 由 kubelet 调度部署, enable 以及start
 8. 配置 `/etc/yum.repos.d/kubernetes.repo`
    ```ymal
     [kubernetes]
@@ -629,7 +633,7 @@ $ yum makecache
     repo_gpgcheck=1
     gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
    ```
-
+9. `yum install kubelet-1.25.3  kubeadm-1.25.3  kubectl-1.25.3 --nogpgcheck -y`
 9. 修改 `/etc/containerd/config.toml` 注释`disabled_plugins = [“cri”]`以及添加registry.k8s.io,docker以及自建镜像库
 10. install [cri-tools](https://github.com/kubernetes-sigs/cri-tools), 修改`vim /etc/crictl.yaml`, pull pasue3.6 以及tag
 11.  kubeadm join .....
