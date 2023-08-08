@@ -99,7 +99,7 @@ server {
 
 ##  vuejs
 
-vuejs history model 情况下，刷新页面，出现404 nginx 问题
+vuejs history model 情况下，刷新页面，出现404 nginx 问题，手动修改
 
 进入nginx 容器
 
@@ -114,5 +114,9 @@ location / {
         try_files $uri $uri/ /index.html =404;
     }
 ```
+
+也可以DOCKERFILE写入指令
+
+`sed -r -i '/\s+index.*index.htm;$/a         \\ttry_files $uri $uri/ /index.html =404;' /etc/nginx/conf.d/default.conf`
 
 [nginx的try_files指令](https://juejin.cn/post/7090038118841057293)

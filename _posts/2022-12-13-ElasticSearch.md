@@ -99,6 +99,42 @@ docker run -d  --network=es --name=cerebro  -e http.port=80  -p 80:80 lmenezes/c
 ```
 
 
+## 脑裂
+
+[split-brain](https://www.elastic.co/guide/en/elasticsearch/reference/6.7/modules-node.html#split-brain)
+
+`(master_eligible_nodes / 2) + 1`
+
+set 2， 3个有资格成为master的node，当其中一个master node 宕机， 剩余两个node将选举出新的master。
+
+
+vmtest docker  run 2 master， graylog-srv 也是 master-node， 当vmtest宕机，cluster 将无法run，因为没有足够的master-eligiable node（至少2）
+
+考虑将 minimum_master_nodes  =1, vmtest es01 作为 master_eligible_node ,es02 只作为 ingest，vmtest 暂不store data。
+
+
+##  iptables failed
+
+install k8s 后 docker container exit 之后无法restart
+
+`'python-nftables' failed: internal:0:0-0: Error: Could not process rule: No such file or directory`
+
+`systemctl restart docker` 无法重启
+
+reboot ,OK
+
+##  docker run ，没有日志写入file
+
+> config/log4j2.properties in the docker image only enables console logging. Docker makes container's console logs available via docker logs.
+
+即使container stop, 也可以查看 docker logs
+
+
+参考[这里](https://discuss.elastic.co/t/how-do-i-get-to-see-elasticsearch-own-logs-in-a-dockerized-elasticsearch/236839/5)
+
+
+
+
 [runlike](https://github.com/lavie/runlike)
 
 [Kubernetes-elasticsearch-nfs 集群部署](https://juejin.cn/post/7210338718312955961)
