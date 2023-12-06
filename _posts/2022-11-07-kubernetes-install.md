@@ -31,6 +31,10 @@ kubectl scale deployment/xxxx --replicas=5 -n lesaunda
 kubectl config view --minify --output 'jsonpath={..namespace}'; echo
 # set default namespace
 kubectl config set-context --current --namespace=<NAME>
+# restart daemonset
+kubectl rollout restart  daemonset filebeat -n kube-system
+kubectl rollout status ds/filebeat -n kube-system
+
 ```
 
 1. localhost:8080 was refused
@@ -316,6 +320,7 @@ rm -f crictl-$VERSION-linux-amd64.tar.gz
 
 ```bash
 crictl ps
+crictl logs <container_id> 2>filename
 crictl images
 crictl inspect [container_id]
 crictl inspecti [image_id]
@@ -1019,7 +1024,7 @@ kubeadm init \
 保留etcd ，reinit 的方法不可行，将丢失init的node，考虑将ip指向vm，再vm上做LB
 
 
-###  Install as node
+##  Install as node
 
 1. `mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak`
 ```bash
@@ -1036,7 +1041,7 @@ $ yum makecache
    sudo sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
    sudo systemctl mask swap.target
    ```
-5. swapoff -a #关闭内存交换
+5. swapoff -a #关闭内存交换,同时修改 /etc/fstab 注释 swap 行
 6. 配置docker.repo  `yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo`
 7. install containerd(preinstall runc and cni plugin), runc centos 7 自带（runc --version 1.1.7）， cni plugin flannel 由 kubelet 调度部署, enable 以及start
 8. 配置 `/etc/yum.repos.d/kubernetes.repo`
@@ -1053,6 +1058,22 @@ $ yum makecache
 10. 修改 `/etc/containerd/config.toml` 注释`disabled_plugins = [“cri”]`以及添加registry.k8s.io,docker以及自建镜像库
 11. install [cri-tools](https://github.com/kubernetes-sigs/cri-tools), 修改`vim /etc/crictl.yaml`, pull pasue3.6 以及tag
 12.  kubeadm join .....
+
+
+##  Helm
+
+Helm 是 Kubernetes 的包管理器
+
+install
+
+```sh
+$ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+$ chmod 700 get_helm.sh
+$ ./get_helm.sh
+```
+
+[安装Helm](https://helm.sh/zh/docs/intro/install/)
+
 
 
 ## 参考
@@ -1096,3 +1117,4 @@ $ yum makecache
 [ingress-nginx tcp/udp 转发](https://segmentfault.com/a/1190000038582391)，
 
 [真一文搞定 ingress-nginx 的使用](https://cloud.tencent.com/developer/article/1761376)
+

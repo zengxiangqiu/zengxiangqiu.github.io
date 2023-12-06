@@ -14,3 +14,15 @@ ctrl+k, ctrl+j 展开所有
 # 2. 打开资源管理器
 
 ctrl+alt+E, shift+alt+R 组合打开
+
+
+list to sql in query
+1. install  List to SQL IN Query (...) builder
+2. open keybinding.json
+
+   ```json
+   {
+    "key": "ctrl+cmd+/",
+    "command": "extension.list-to-in-query.new-line"
+   }
+   ```
