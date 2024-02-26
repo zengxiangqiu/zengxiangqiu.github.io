@@ -935,21 +935,29 @@ spec:
 
 redis-cli -a [password] --cluster create 10.244.2.89:6379 10.244.2.90:6379 10.244.0.20:6379 10.244.2.91:6379 10.244.0.21:6379 10.244.2.92:6379 --cluster-replicas 1
 
-
 所有pods down, 要手动delete rdb file, aof file, nodes.conf ，redis-cli 执行 flushdb, cluster reset,比较复杂，采用下面方式重建
 
 如果所有 pod 下线，需要重新建群
 
-1. `kubectl delete -f redis-cluster.yml` 删除资源
-2. `kubectl delete pvc/data-redis-cluster-0 -n redis-cluster` 逐一删除 pvc
-3. `rm -rf /nfs_root/redis-cluster-data-redis-cluster-*/` 删除 nfs 空间
-4. `kubectl apply -f redis-cluster.yml` 重新建立集群
+```sh
+$ kubectl delete -f redis-cluster.yml # 删除资源
+$ for i in {0..5}; do kubectl delete pvc/data-redis-cluster-$1 -n redis-cluster; done; # 删除pvc
+$ for i in {0..5}; do rm -rf /root/nfs_root/redis-cluster-data-redis-cluster-$i; done; # 删除nfs
+$ kubectl apply -f redis-cluster.yml # 部署资源
+$ kubectl get pods -l app=redis-cluster -n redis-cluster -o jsonpath='{range.items[*]}{.status.podIP}:6379 ' # 获取ip
+$ kubectl -n redis-cluster exec -it redis-cluster-0 /bin/sh # 进入pod
+$ redis-cli -a password --cluster create 10.244.2.89:6379 10.244.2.90:6379 10.244.0.20:6379 10.244.2.91:6379 10.244.0.21:6379 10.244.2.92:6379 --cluster-replicas 1 # build cluster
+```
 
-或者
+或者(验证过，无法build cluster,要 delete rdb file, aof file, nodes.conf ，redis-cli 执行 flushdb, cluster reset)
 
 1. `kubectl delete -f redis-cluster.yml` 删除资源
 2. `rm -f /ifs/kubernetes/redis-cluster-data-redis-cluster-0*/nodes.conf*` 逐一删除 nodes.conf
 3. `kubectl apply -f redis-cluster.yml` 重新建立集群
+
+for i in {0..5}; do rm -rf /root/nfs_root/redis-cluster-data-redis-cluster-$i; done;
+
+for i in {0..5}; do kubectl delete pvc/data-redis-cluster-$1 -n redis-cluster; done;
 
 ### redisinsight
 

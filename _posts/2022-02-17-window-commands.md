@@ -18,3 +18,6 @@ Windows 7 SP1 does not contain any major improvements; it’s basically a rollup
 同步系统时钟
 
 
+[Enable TLS 1.2 on Windows 7](https://windowsreport.com/enable-tls-1-2-windows-11/#:~:text=What%20is%20the%20command%20to%20check%20the%20TLS,the%20following%20command%3A%20Get-TlsCipherSuite.%204%20Press%20Enter.%20Y)
+
+
