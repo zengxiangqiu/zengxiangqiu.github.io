@@ -10,3 +10,9 @@ tags: [k8s,nfs]
 yum install -y nfs-utils
 
 
+```sh
+nfsstat -s -c
+```
+
+
+[Using nfsstat and nfsiostat to troubleshoot NFS performance issues on Linux](https://www.redhat.com/sysadmin/using-nfsstat-nfsiostat)

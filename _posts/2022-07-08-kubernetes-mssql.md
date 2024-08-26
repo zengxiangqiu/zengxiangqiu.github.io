@@ -27,3 +27,5 @@ COPY --from=publish /app/publish .
 [Clarify supported Microsoft SQL Server versions](https://github.com/sequelize/sequelize/issues/13838)
 
 > Sequelize does not need to claim support for versions 2012, 2014 if we can't test that in the pipeline.
+
+[filter sp_who2](https://www.stevefenton.co.uk/blog/2018/07/sql-server-filter-and-sort-records-from-sp_who2/)

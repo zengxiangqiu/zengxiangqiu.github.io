@@ -35,7 +35,36 @@ kubectl config set-context --current --namespace=<NAME>
 kubectl rollout restart  daemonset filebeat -n kube-system
 kubectl rollout status ds/filebeat -n kube-system
 
+kubectl create configmap xx_config --from-file=.env
+# copy configmap
+kubectl get configmap <secret-name> --namespace=<source-namespace> -o yaml \
+  | sed 's/namespace: <from-namespace>/namespace: <to-namespace>/' \
+  | kubectl create -f -
+# Let’s check for the expiration date of a specific certificate
+openssl x509 -in /etc/kubernetes/pki/apiserver.crt -noout -text | grep 'Not After'
+find /etc/kubernetes/pki/ -type f -name "*.crt" -print | grep -v 'ca.crt$' | xargs -L 1 -t -i bash -c 'openssl x509 -noout -text -in {} | grep "Not After"'
+kubeadm certs check-expiration
+kubeadm certs renew all
+# After renewing the certificates, we need to restart the control plane components, including the API server, controller manager, and scheduler, to use the new certificates.
+$ sudo systemctl restart kubelet
+
+$ kubectl -n seatunnel cp ./xxx.jar seatunnel-0:/opt/seatunnel/lib -c seatunnel
+# remove all evicted pods
+kubectl get pod -n airflow| grep Evicted | awk '{print $1}' | xargs kubectl delete pod -n airflow
 ```
+
+## yaml block
+
+1. hostAliases
+```yaml
+  hostAliases:
+  - ip: "192.168.1.10"
+    hostnames:
+    - "foo.local"
+    - "bar.local"
+```
+
+
 
 1. localhost:8080 was refused
 
@@ -203,6 +232,8 @@ kubeadm join kube-apiserver:6443 \
 
    执行`echo "1" >/proc/sys/net/bridge/bridge-nf-call-iptables`
 
+   提示  No such file or directory, 没有 bridge folder ，要enable br_netfilter  `modprobe br_netfilter`， 再 `sysctl net.bridge.bridge-nf-call-iptables=1`， 同样 `sysctl net.ipv4.ip_forward=1`
+
 * kubeadm join --control-plane lack of etcd
 
   [工作流](https://kubernetes.io/zh-cn/docs/reference/setup-tools/kubeadm/kubeadm-join/#join-workflow)
@@ -314,7 +345,7 @@ Install
 ```sh
 VERSION="v1.26.0"
 wget https://github.com/kubernetes-sigs/cri-tools/releases/download/$VERSION/crictl-$VERSION-linux-amd64.tar.gz
-sudo tar zxvf crictl-$VERSION-linux-amd64.tar.gz -C /usr/local/bin
+sudo tar -zxvf crictl-$VERSION-linux-amd64.tar.gz -C /usr/local/bin
 rm -f crictl-$VERSION-linux-amd64.tar.gz
 ```
 
@@ -1068,6 +1099,10 @@ $ yum makecache
 12.  kubeadm join .....
 
 
+##  container-runtime
+> Flag --container-runtime has been deprecated, will be removed in 1.27 as the only valid value is 'remote'
+`vim  /var/lib/kubelet/kubeadm-flags.env`  移除 `--container-runtime`参数
+
 ##  Helm
 
 Helm 是 Kubernetes 的包管理器
@@ -1082,7 +1117,11 @@ $ ./get_helm.sh
 
 [安装Helm](https://helm.sh/zh/docs/intro/install/)
 
+```sh
+helm add repo [name] [url]
 
+helm search repo [name]
+```
 
 ## 参考
 

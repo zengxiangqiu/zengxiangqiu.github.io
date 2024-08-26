@@ -66,6 +66,8 @@ ReadWriteMany 卷可以被多个节点以读写方式挂载
 - Recycle -- 基本擦除 (rm -rf /thevolume/*)
 - Delete -- 诸如 AWS EBS、GCE PD、Azure Disk 或 OpenStack Cinder 卷这类关联存储资产也被删除
 
+user 删除 PVC 不会立刻移除，会等待关联的pod退出， 同理，删除PV要求没有bound的PVC，顺序上是先terminal pod，delete pvc ,自动 delete pv
+
 ## nfs install
 
 1. server
@@ -118,3 +120,6 @@ storageclass 会指定provisioner(制备器)，比如nfs需要外部制备器（
 [kubernetes examples](https://github.com/kubernetes/examples/blob/master/staging/volumes/nfs/nfs-busybox-deployment.yaml)
 
 [linux 分区](https://phoenixnap.com/kb/linux-create-partition)
+
+
+[pvc capacity just a label](https://github.com/kubernetes/kubernetes/issues/48701)

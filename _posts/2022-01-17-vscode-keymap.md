@@ -15,6 +15,15 @@ ctrl+k, ctrl+j 展开所有
 
 ctrl+alt+E, shift+alt+R 组合打开
 
+```plain
+[`]?e3\w+[`]?.[`]?\w+[`]?
+
+匹配 百胜 tables
+```
+
+
+
+
 
 list to sql in query
 1. install  List to SQL IN Query (...) builder
@@ -26,3 +35,5 @@ list to sql in query
     "command": "extension.list-to-in-query.new-line"
    }
    ```
+
+[vscode-sqltools](https://vscode-sqltools.mteixeira.dev/en/settings)

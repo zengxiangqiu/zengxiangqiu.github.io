@@ -66,8 +66,11 @@ metadata:
 `kubectl patch crd/rabbitmqclusters.rabbitmq.com -p '{"metadata":{"finalizers":[]}}' --type=merge`
 
 
+## PRECONDITION-FAILED
 
+客户端连接提示 timeout 以及  PRECONDITION-FAILED， 查看rabbimq-ui发现节点0内存使用已超过阈值（watermark）,进入pod，查看`rabbitmq-diagnostics status` 以及 `rabbitmq-diagnostics memory_breakdown` ，设置为4G `rabbitmqctl set_vm_memory_high_watermark  absolute "4G"` 或者 `rabbitmqctl set_vm_memory_high_watermark  relative  0.4` 剩余可用内存40%时预警
 
+参考 [Memory Threshold and Limit](https://www.rabbitmq.com/docs/memory)
 
 
 ## 步骤
