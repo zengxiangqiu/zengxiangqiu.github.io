@@ -199,3 +199,6 @@ SET GLOBAL group_replication_force_members="127.0.0.1:10000,127.0.0.1:10001";
 [Handling a Network Partition and Loss of Quorum ](https://dev.mysql.com/doc/refman/8.0/en/group-replication-network-partitioning.html)
 
 [MySQL any way to import a huge (32 GB) sql dump faster?](https://dba.stackexchange.com/questions/83125/mysql-any-way-to-import-a-huge-32-gb-sql-dump-faster)
+
+
+[MariaDB](https://logiqx.github.io/tech-docs/Services/Databases/MariaDB/)

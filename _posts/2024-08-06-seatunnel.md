@@ -104,6 +104,10 @@ sink {
 ```
 
 
+```sh
+kubectl  -n mysql exec xx -c mysql   -- mysqldump  --disable-keys  --set-gtid-purged=OFF   --single-transaction  --no-data  -h127.0.1.0 -uroot  -p xx  > xx.sql
+```
+
 
 ```sql
 -- 排除不兼容的tables, 列名带# ，表名带 .
@@ -111,4 +115,22 @@ SELECT * FROM information_schema.columns where table_schema = 'xxxx' and (column
 
 ```
 
+1. snapshot splitreader 阶段暂停task，savepoint 保持offset，缓存中的queue是否存在？
+内存
+2. seatunnel 退出的原因
+cluster miss `-d`, Ctrl+c 退出
+3. 恢复任务
+即使data_save_mode=drop_data，有checkpoint的情况下依然可以增量
+
+
+
+
 [Incremental Snapshots in Debezium](https://debezium.io/blog/2021/10/07/incremental-snapshots/#:~:text=When%20a%20table%20snapshot%20is%20requested%2C%20then%20Debezium,size%20as%20prescribed%20by%20the%20incremental.snapshot.chunk.size%20configuration%20option)
+
+
+```ini
+     debezium{
+       include.schema.changes = false
+     }
+
+```

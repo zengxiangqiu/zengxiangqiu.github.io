@@ -311,6 +311,7 @@ From 192.168.16.1 icmp seq =1  destination host unreachable
 ```bash
 # 查看iptables 规则,没有发现异常
 iptables -L -n
+iptables --table nat --list
 
 # firewall status inactive
 systemctl status firewalld.service
@@ -334,6 +335,16 @@ nmcli connecion down <bridge_name>
 
 # ping ok
 
+# proxy 无法access kube-apiserver no such host , 8.8.8.8 resolv, 修改 本机和pod /etc/resolv.conf  重启会被自动覆盖
+# install resolvconf， 配置 /etc/resolvconf/resolv.conf.d/head亦无法修复此问题
+systemd-resolve --status
+sudo systemctl status systemd-resolved.service
+sudo cat  /run/systemd/resolve/resolv.conf
+# 修改 resolved.conf
+sudo vim  /etc/systemd/resolved.conf
+[Resolve]
+FallbackDNS=192.168.1.xxx 192.168.1.xxx
+Domains=xxx.com.cn
 ```
 
 ## crictl

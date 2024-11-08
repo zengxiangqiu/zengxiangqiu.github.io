@@ -12,6 +12,9 @@ Get-SmbServerConfiguration | Select EnableSMB2Protocol,EnableSMB1Protocol
 Get-WindowsOptionalFeature -Online -FeatureName SMB1Protocol
 # detect service is running
 sc.exe query mrxsmb10
+
+# refresh dns
+ipconfig ./flushdns
 ```
 [How to detect, enable and disable SMBv1, SMBv2, and SMBv3 in Windows](https://learn.microsoft.com/en-us/windows-server/storage/file-server/troubleshoot/detect-enable-and-disable-smbv1-v2-v3?tabs=server)
 
